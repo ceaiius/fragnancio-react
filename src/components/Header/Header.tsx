@@ -8,6 +8,7 @@ import heartIcon from '@/assets/heart.svg';
 import bagIcon from '@/assets/bag.svg';
 import burgerIcon from '@/assets/burger.svg';
 import Navbar from './Navbar';
+import UserMenu from './UserMenu';
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -17,7 +18,7 @@ const Header = () => {
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate('/login', {replace: true});
+    navigate('/', {replace: true});
   }
   const isAuthenticated = !!token;
   
@@ -51,42 +52,38 @@ const Header = () => {
 
           <nav>
             <ul className="flex gap-4 items-center">
-                  <li className='md:hidden'>
+                  <li className='md:hidden order-1'>
                         <img src={searchIcon} className="w-7 h-7" alt='search icon' />
                   </li>
-                  <li>
+                  <li className='order-3'>
                     <Link to="/wishlist">
                       <img src={heartIcon} className='w-7 h-7' alt='heart icon' />
                     </Link>
                   </li>
-                  <li>
+                  <li className='order-4'>
                     <Link to="/cart">
                       <img src={bagIcon} className='w-7 h-7' alt='bag icon' />
                     </Link>
                   </li>
               {isAuthenticated ? (
                 <>
-                  <li>
-                    <button className="bg-black-default text-white px-4 py-1 rounded-xs font-bold hidden md:block">
+                  <li className='md:order-1'>
+                    <button className="bg-black-default text-white px-4 py-1 rounded-xs font-bold hidden md:block ">
                       Sell now
                     </button>
                   </li>
                   
-                  <li>
+                  <li className='order-2'>
                     <Link to="/inbox">
                       <img src={inboxIcon} className='w-7 h-7' alt='inbox icon' />
                     </Link>
                   </li>
                   
-                  <li className='hidden md:block'>
-                    <Link to="/profile">Profile</Link>
+                  <li className='hidden md:block order-6'>
+                    <UserMenu/>
                   </li>
 
-                  <li className="hidden md:block">
-                    <button onClick={handleLogout} className="text-red-600 font-medium" disabled={loading}>
-                      {loading ? 'Logging out...' : 'Logout'}
-                    </button>
-                  </li>
+                  
 
                 </>
               ) : (
@@ -96,7 +93,7 @@ const Header = () => {
                   </li>
                   <li>
                     <Link to="/signup">
-                      <button className="bg-black-default text-white px-4 py-1 rounded-xs font-bold">
+                      <button className="bg-black-default text-white px-4 py-1 rounded-xs font-bold cursor-pointer">
                         Sign up
                       </button>
                     </Link>

@@ -2,44 +2,78 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { login, fetchUser } from '@/features/auth/authSlice';
+import { login, fetchUser, resetAuth, type BackendFieldErrors } from '@/features/auth/authSlice';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { type LoginFormData } from '@/types/auth';
+
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
   password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
 });
 
+type LoginFormValues = z.infer<typeof loginSchema>;
+
 const Login = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { token, error, loading } = useAppSelector((state) => state.auth);
+  const { token, error: apiError, loading, isSuccess } = useAppSelector((state) => state.auth);
 
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
+      defaultValues: {
+        email: '',
+        password: '',
+      }
   });
 
   const onSubmit = async (data: LoginFormData) => {
+    dispatch(resetAuth()); 
     await dispatch(login(data));
   };
 
   useEffect(() => {
-    if (token) {
+    if (isSuccess && token) {
       dispatch(fetchUser());
       navigate('/');
     }
-  }, [token, dispatch, navigate]);
+  }, [isSuccess, token, dispatch, navigate]);
+
+  useEffect(() => {
+          if (apiError) {
+              if (typeof apiError === 'object' && apiError !== null && !Array.isArray(apiError)) {
+                  Object.keys(apiError).forEach((key) => {
+                      const fieldName = key as keyof LoginFormValues;
+                      const messages = (apiError as BackendFieldErrors)[fieldName];
+                      if (messages && messages.length > 0) {
+                          setError(fieldName, {
+                              type: 'server', 
+                              message: messages[0],
+                          });
+                      }
+                  });
+              } else if (typeof apiError === 'string') {
+                  console.error("Generic API Error:", apiError);
+              }
+          }
+      }, [apiError, setError]);
+  
+      useEffect(() => {
+          return () => {
+              dispatch(resetAuth());
+          };
+      }, [dispatch]);
 
   return (
     <div className="flex h-screen font-mono">
       {/* Left Image Section */}
-      <div className="w-1/2 bg-cover bg-center hidden md:block" style={{ backgroundImage: 'url(/login-banner.jpg)' }}></div>
+      <div className="w-1/2 bg-cover bg-center hidden xl:block" style={{ backgroundImage: 'url(src/assets/test.png)' }}></div>
 
       {/* Right Form Section */}
       <div className="w-full md:w-1/2 flex justify-center p-8 mx-auto">
@@ -68,7 +102,9 @@ const Login = () => {
             {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
           </div>
 
-          {error && <p className="text-sm text-red-500">{error}</p>}
+          {typeof apiError === 'string' && (
+            <p className="text-sm text-red-600 bg-red-100 p-3 rounded text-center">{apiError}</p>
+          )}
 
           <button
             type="submit"

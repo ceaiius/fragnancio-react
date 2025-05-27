@@ -1,9 +1,9 @@
+import type { LoginFormData, RegisterFormData } from '@/types/auth';
 import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 const API_URL = 'http://localhost:8000/api';
 
-const token = localStorage.getItem('token');
 
 interface User {
   id: number;
@@ -11,24 +11,47 @@ interface User {
   email: string;
 }
 
+export interface BackendFieldErrors {
+  [key: string]: string[]; 
+}
+
 type AuthState = {
   token: string | null;
   user: User | null;
   loading: boolean;
-  error: string | null;
+  isSuccess: boolean;
+  error: string | BackendFieldErrors | null;
 };
 
 const initialState: AuthState = {
-  token: null,
+  token: localStorage.getItem('token'),
   user: null,
   loading: false,
+  isSuccess: false,
   error: null,
 };
 
+export const register = createAsyncThunk<string, RegisterFormData, {rejectValue : string | BackendFieldErrors}
+>(
+  'auth/signup',
+  async ({ username, email, password, confirm_password }, thunkAPI) => {
+    try {
+      const response = await axios.post(`${API_URL}/register`, { username, email, password, confirm_password });
+      localStorage.setItem('token', response.data.token);
+      return response.data.token;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response && error.response.data && error.response.data.errors) { 
+        return thunkAPI.rejectWithValue(error.response.data.errors as BackendFieldErrors);
+      }
+      return thunkAPI.rejectWithValue('Sign up failed');
+    }
+  }
+)
+
 export const login = createAsyncThunk<
-  string, // Return type (token)
-  { email: string; password: string }, // Argument type
-  { rejectValue: string }
+  string,
+  LoginFormData,
+  { rejectValue: string | BackendFieldErrors; }
 >(
   'auth/login',
   async ({ email, password }, thunkAPI) => {
@@ -37,8 +60,8 @@ export const login = createAsyncThunk<
       localStorage.setItem('token', response.data.token);
       return response.data.token;
     } catch (error: unknown) {
-      if (axios.isAxiosError(error) && error.response) {
-        return thunkAPI.rejectWithValue(error.response.data?.error || 'Login failed');
+      if (axios.isAxiosError(error) && error.response && error.response.data && error.response.data.error) {
+        return thunkAPI.rejectWithValue(error.response.data.error as BackendFieldErrors);
       }
       return thunkAPI.rejectWithValue('Login failed');
     }
@@ -99,20 +122,56 @@ export const logout = createAsyncThunk<
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    resetAuth: (state) => {
+      state.loading = false;
+      state.isSuccess = false;
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(login.pending, (state) => {
         state.loading = true;
+        state.isSuccess = false;
         state.error = null;
       })
       .addCase(login.fulfilled, (state, action: PayloadAction<string>) => {
         state.loading = false;
+        state.isSuccess = true;
+        state.token = action.payload;
+        state.error = null;
+      })
+      .addCase(login.rejected, (state, action : PayloadAction<string | BackendFieldErrors | undefined>) => {
+        state.loading = false;
+        state.isSuccess = false;
+        
+        if (action.payload) {
+          state.error = action.payload;
+        } else {
+          state.error = 'Authorization failed due to an unknown error.';
+        }
+
+      })
+      .addCase(register.pending, (state) => {
+        state.loading = true;
+        state.isSuccess = false;
+        state.error = null;
+      })
+      .addCase(register.fulfilled, (state, action: PayloadAction<string>) => {
+        state.loading = false;
+        state.isSuccess = true;
+        state.token = action.payload;
         state.token = action.payload;
       })
-      .addCase(login.rejected, (state, action) => {
+      .addCase(register.rejected, (state, action: PayloadAction<string | BackendFieldErrors | undefined>) => {
         state.loading = false;
-        state.error = action.payload ?? 'Login failed';
+        state.isSuccess = false;
+        if (action.payload) {
+          state.error = action.payload;
+        } else {
+          state.error = 'Register failed due to an unknown error.';
+        }
       })
       .addCase(logout.pending, (state) => {
         state.loading = true;
@@ -130,4 +189,5 @@ const authSlice = createSlice({
   },
 });
 
+export const { resetAuth } = authSlice.actions;
 export default authSlice.reducer;
