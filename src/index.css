@@ -3,6 +3,14 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  --color-red-default: #E52020;
+  --color-black-button: #F3F3F3;
+  --color-black-border: #262626;
+  --color-light-border: #d7d7d7;
+  --color-white-border: #eeeeee;
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
