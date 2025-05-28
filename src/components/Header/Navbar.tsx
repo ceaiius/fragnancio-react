@@ -20,12 +20,17 @@ const Navbar = ({ isMobile = false }: NavbarProps) => {
   return (
     <nav className={`${isMobile ? 'm-0 p-0' : 'px-4 py-0 border border-white-border'} font-mono`}>
       <ul className={`list-none ${isMobile ? 'flex flex-col text-lg font-semibold' : 'flex gap-8 font-bold text-lg p-4'}`}>
-        {['Men', 'Women', 'Brands', 'Notes'].map((item) => (
-          <li key={item} className={`${isMobile && 'py-3 px-4 border-b  border-black-button' } flex items-center justify-between`}>
-            <a href="#" className="block">{item}</a>
-            { isMobile && (<ArrowRight className="w-5 h-5 text-black-default" />)}
-          </li>
-        ))}
+      {['Men', 'Women', 'Unisex', 'Sale'].map((item) => (
+        <li
+          key={item}
+          className={`${isMobile && 'py-3 px-4 border-b  border-black-button'} flex items-center justify-between`}
+        >
+          <Link to={`/category/${item.toLowerCase()}`} className="block capitalize">
+            {item}
+          </Link>
+          {isMobile && <ArrowRight className="w-5 h-5 text-black-default" />}
+        </li>
+      ))}
       </ul>
 
         {/* Divider before profile/logout */}

@@ -18,6 +18,7 @@ const SeeMoreModal = ({
   const [isLoading, setIsLoading] = useState(false);
   const loaderRef = useRef<HTMLDivElement | null>(null);
   const prevCategoryKeyRef = useRef<string | undefined>(undefined);
+  const isLoadingRef = useRef(isLoading);
 
   // Ref for the modal's content area
   const modalContentRef = useRef<HTMLDivElement | null>(null);
@@ -34,12 +35,8 @@ const SeeMoreModal = ({
     }
   }, [categoryKey]);
 
-  // Effect for fetching products
   useEffect(() => {
-    if (isLoading && page > 1) {
-      console.log(`Fetch skipped for page ${page}: isLoading is true.`);
-      return;
-    }
+
     if (!hasMore && page > 1) {
       console.log(`Fetch skipped for page ${page}: no more products.`);
       return;
@@ -76,8 +73,7 @@ const SeeMoreModal = ({
     const observer = new IntersectionObserver(
       (entries) => {
         const firstEntry = entries[0];
-        if (firstEntry.isIntersecting && hasMore && !isLoading) {
-          console.log('Loader intersecting, fetching next page.');
+        if (firstEntry.isIntersecting && hasMore && !isLoadingRef.current) {
           setPage((prevPage) => prevPage + 1);
         }
       },
@@ -109,6 +105,10 @@ const SeeMoreModal = ({
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [onClose]); 
+
+  useEffect(() => {
+    isLoadingRef.current = isLoading;
+  }, [isLoading]);
 
   return (
     <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
