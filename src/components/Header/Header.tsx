@@ -45,7 +45,7 @@ const Header = () => {
 
           <nav>
             <ul className="flex gap-4 items-center">
-                  <li className='hidden md:block order-1 cursor-pointer'>
+                  <li className='md:hidden order-1 cursor-pointer'>
                         <img src={searchIcon} className="w-7 h-7" alt='search icon' />
                   </li>
                   <li className='order-3 hidden md:block'>

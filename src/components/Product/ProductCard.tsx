@@ -1,5 +1,5 @@
 import { type Product } from '@/types/product';
-
+import React from 'react';
 const ProductCard = ({ product }: { product: Product }) => {
   return (
     <div className="flex flex-col items-center">
@@ -17,4 +17,4 @@ const ProductCard = ({ product }: { product: Product }) => {
   );
 };
 
-export default ProductCard;
+export default React.memo(ProductCard)

@@ -17,3 +17,13 @@ export const fetchProducts = async (type?: string, page = 1): Promise<{
   const res = await API.get('/products', { params: { type, page } });
   return res.data;
 };
+
+export const fetchProductsByCategory = async (category: string, page: number) => {
+  const isVirtual = ['suggested', 'popular', 'recently_viewed'].includes(category);
+  const url = isVirtual
+    ? `/home/${category}?page=${page}`
+    : `/categories/${category}/products?page=${page}`;
+
+  const res = await API.get(url);
+  return res.data.data; // adapt if needed
+};
