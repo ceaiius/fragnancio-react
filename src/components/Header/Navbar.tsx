@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { logout } from '@/features/auth/authSlice';
-import { User, LogOut } from 'lucide-react'; // Lucide icons (or use custom SVGs)
+import { User, LogOut, ArrowRight } from 'lucide-react';
 
 interface NavbarProps {
   isMobile?: boolean;
@@ -20,10 +20,10 @@ const Navbar = ({ isMobile = false }: NavbarProps) => {
   return (
     <nav className={`${isMobile ? 'm-0 p-0' : 'px-4 py-0 border border-white-border'} font-mono`}>
       <ul className={`list-none ${isMobile ? 'flex flex-col text-lg font-semibold' : 'flex gap-8 font-bold text-lg p-4'}`}>
-        {/* Category links */}
         {['Men', 'Women', 'Brands', 'Notes'].map((item) => (
-          <li key={item} className="py-3 px-4 border-b  border-black-button">
+          <li key={item} className={`${isMobile && 'py-3 px-4 border-b  border-black-button' } flex items-center justify-between`}>
             <a href="#" className="block">{item}</a>
+            { isMobile && (<ArrowRight className="w-5 h-5 text-black-default" />)}
           </li>
         ))}
       </ul>
@@ -31,9 +31,8 @@ const Navbar = ({ isMobile = false }: NavbarProps) => {
         {/* Divider before profile/logout */}
         {isMobile && token && (
           <>
-
-          <ul className='border-t border-black-default'>
-            <li className="flex items-center gap-3 py-8 px-4">
+          <ul className='flex flex-col gap-6 border-t border-black-default px-4 py-6 [&>li]:border-black-button [&>li]:border-b [&>li]:pb-3'>
+            <li className="flex items-center">
               <div className='flex flex-row-reverse justify-between items-center gap-3 w-full'>
                 <User className="w-5 h-5" />
                 <div>
@@ -43,12 +42,16 @@ const Navbar = ({ isMobile = false }: NavbarProps) => {
               </div>
             </li>
 
-            <li className="flex items-center gap-3 px-4">
+            <li>
+              <Link to="/products/create">Sell</Link>
+            </li>
+
+            <li className="flex items-center gap-3">
               <LogOut className="w-5 h-5 text-red-500" />
               <button
                 onClick={handleLogout}
                 disabled={loading}
-                className="text-red-default font-medium"
+                className="text-red-default font-medium cursor-pointer"
               >
                 {loading ? 'Logging out...' : 'Logout'}
               </button>

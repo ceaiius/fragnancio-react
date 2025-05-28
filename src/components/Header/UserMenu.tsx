@@ -33,7 +33,7 @@ const UserMenu = () => {
     <div className="relative" ref={menuRef}>
       <button
         onClick={toggleMenu}
-        className="flex items-center gap-2 px-2 py-1 rounded-full transition"
+        className="flex items-center gap-2 px-2 py-1 rounded-full transition cursor-pointer"
       >
         <img src={avatarIcon} alt="User Avatar" className="w-8 h-8 rounded-full" />
         <ChevronDown className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
@@ -48,7 +48,7 @@ const UserMenu = () => {
             <li>
               <button
                 onClick={handleLogout}
-                className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600"
+                className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600 cursor-pointer"
                 disabled={loading}
               >
                 {loading ? 'Logging out...' : 'Logout'}

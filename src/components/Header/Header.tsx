@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { logout } from '@/features/auth/authSlice';
+import { Link } from 'react-router-dom';
+import { useAppSelector } from '@/store/hooks';
 import searchIcon from '@/assets/search.svg';
 import inboxIcon from '@/assets/inbox.svg';
 import heartIcon from '@/assets/heart.svg';
@@ -9,17 +8,11 @@ import bagIcon from '@/assets/bag.svg';
 import burgerIcon from '@/assets/burger.svg';
 import Navbar from './Navbar';
 import UserMenu from './UserMenu';
-
+import { X } from 'lucide-react';
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { token, loading } = useAppSelector((state) => state.auth);
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const { token } = useAppSelector((state) => state.auth);
 
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate('/', {replace: true});
-  }
   const isAuthenticated = !!token;
   
   return (
@@ -41,7 +34,7 @@ const Header = () => {
             </Link>
           </div>
 
-          <div className="relative hidden md:flex w-[34vw] lg:w-[42vw] max-w-[704px]">
+          <div className="relative hidden md:flex w-[34vw] lg:w-[42vw] max-w-[704px] cursor-pointer">
             <img src={searchIcon} className="absolute left-6 w-5 h-full" alt="search" />
             <input
               type="text"
@@ -52,10 +45,10 @@ const Header = () => {
 
           <nav>
             <ul className="flex gap-4 items-center">
-                  <li className='md:hidden order-1'>
+                  <li className='hidden md:block order-1 cursor-pointer'>
                         <img src={searchIcon} className="w-7 h-7" alt='search icon' />
                   </li>
-                  <li className='order-3'>
+                  <li className='order-3 hidden md:block'>
                     <Link to="/wishlist">
                       <img src={heartIcon} className='w-7 h-7' alt='heart icon' />
                     </Link>
@@ -68,7 +61,7 @@ const Header = () => {
               {isAuthenticated ? (
                 <>
                   <li className='md:order-1'>
-                    <button className="bg-black-default text-white px-4 py-1 rounded-xs font-bold hidden md:block ">
+                    <button className="bg-black-default text-white px-4 py-1 rounded-xs font-bold hidden md:block cursor-pointer">
                       Sell now
                     </button>
                   </li>
@@ -88,10 +81,10 @@ const Header = () => {
                 </>
               ) : (
                 <>
-                  <li>
+                  <li className='order-5'>
                     <Link to="/login" className="text-black font-medium">Login</Link>
                   </li>
-                  <li>
+                  <li className='order-6'>
                     <Link to="/signup">
                       <button className="bg-black-default text-white px-4 py-1 rounded-xs font-bold cursor-pointer">
                         Sign up
@@ -123,7 +116,7 @@ const Header = () => {
       >
         <div className="flex justify-between items-center p-4 border-b border-gray-200">
           <h2 className="text-xl font-bold text-red-default">Frag</h2>
-          <button onClick={() => setMenuOpen(false)} className="text-2xl font-bold">&times;</button>
+          <button onClick={() => setMenuOpen(false)} className="text-2xl font-bold cursor-pointer"><X/></button>
         </div>
         <Navbar isMobile />
       </div>
