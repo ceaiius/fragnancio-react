@@ -10,6 +10,7 @@
   --color-gray-default: #d7d7d7;
   --color-white-border: #eeeeee;
   --color-blue-default: #2960AF;
+  --color-gray-faded: #747474;
 }
 
 @theme inline {
