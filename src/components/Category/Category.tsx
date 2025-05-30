@@ -5,6 +5,7 @@ import ProductCard from '@/components/Product/ProductCard';
 import ProductSkeleton from '../Product/ProductSkeleton';
 import { fetchProductsByCategory } from '@/services/products';
 import Breadcrumbs from '../Breadcrumbs';
+import FiltersBar from '../Filters/FiltersBar';
 
 const PAGE_SIZE = 12; 
 
@@ -86,6 +87,7 @@ const Category = () => {
   return (
     <div className="max-w-[1280px] w-full px-0 py-4 ml-auto mr-auto mt-4 mb-8 font-mono">
       <Breadcrumbs />
+      <FiltersBar/>
       <h1 className="text-2xl font-bold mb-4 capitalize">{slug} Products</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 lg:grid-cols-4 gap-4">
         {isLoading && page == 1
