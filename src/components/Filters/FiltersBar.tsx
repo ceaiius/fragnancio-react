@@ -1,61 +1,28 @@
 // FiltersBar.tsx
-import FilterDropdown from './FilterDropdown';
-import FilterCheckbox from './FilterCheckbox';
-import FilterDropdownSkeleton from './FilterDropdownSkeleton';
-import FilterCheckboxSkeleton from './FilterCheckboxSkeleton';
+import FilterDropdown from './forms/FilterDropdown';
+import FilterCheckbox from './forms/FilterCheckbox';
+import FilterDropdownSkeleton from './skeletons/FilterDropdownSkeleton';
+import FilterCheckboxSkeleton from './skeletons/FilterCheckboxSkeleton';
 
-import { useEffect, useState } from 'react';
-import { conditionOptions, fetchCategories, fetchNotes, priceOptions, sizeOptions } from '@/services/filters'; 
-import type { Category } from '@/types/category';
 import type { Note } from '@/types/note';
 import SelectedFiltersBar from './SelectedFiltersBar';
+import { useFilterData } from '@/hooks/useFilterData';
+import type { Filters } from '@/types/filters';
 
-const FiltersBar = () => {
-    const [categories, setCategories] = useState<Category[]>([]);
-    const [notes, setNotes] = useState<Note[]>([]);
-    const [priceRange, setPriceRange] = useState<string[]>([]);
-    const [size, setSize] = useState<string[]>([]);
-    const [condition, setCondition] = useState<string[]>([]);
+import type { Dispatch, SetStateAction } from 'react';
+import type { Brand } from '@/types/brand';
+import PriceFilterDropdown from './forms/FilterPrice';
 
+type FiltersBarType = {
+    selectedFilters: Filters;
+    setSelectedFilters: Dispatch<SetStateAction<Filters>>;
+};
 
-    const [selectedFilters, setSelectedFilters] = useState<{
-        category?: string | number;
-        price?: string | number;
-        size?: string | number;
-        condition?: string | number;
-        note?: string | number;
-        onSale?: boolean;
-    }>({});
+const FiltersBar = ({ selectedFilters, setSelectedFilters }: FiltersBarType) => {
 
-    const [isLoading, setIsLoading] = useState(true); 
-    const [error, setError] = useState<string | null>(null); 
+    const { notes, brands, priceRange, size, condition, isLoading, error } = useFilterData();
+    
 
-    useEffect(() => {
-        const fetchFiltersData = async () => {
-            setIsLoading(true); 
-            setError(null);
-            try {
-                const [fetchedCategories, fetchedNotes] = await Promise.all([
-                    fetchCategories(),
-                    fetchNotes()
-                ]);
-
-                setCategories(fetchedCategories);
-                setNotes(fetchedNotes);
-                setPriceRange(priceOptions);
-                setSize(sizeOptions); 
-                setCondition(conditionOptions);
-
-            } catch (err) {
-                console.error('Error fetching filters:', err);
-                setError('Failed to load filters. Please try again later.');
-            } finally {
-                setIsLoading(false); 
-            }
-        };
-
-        fetchFiltersData();
-    }, []); 
 
 
     const renderFilterDropdowns = () => {
@@ -78,19 +45,18 @@ const FiltersBar = () => {
 
         return (
             <>
-                <FilterDropdown<Category>
-                    label="Categorie"
-                    options={categories}
-                    value={selectedFilters.category ?? ''}
-                    onChange={(value) => setSelectedFilters(prev => ({ ...prev, category: value }))}
+                <FilterDropdown<Brand>
+                    label="Brand"
+                    options={brands}
+                    value={selectedFilters.brand ?? ''}
+                    onChange={(value) => setSelectedFilters(prev => ({ ...prev, brand: value }))}
                     getLabel={(item) => item.name}
                     getValue={(item) => item.slug} 
                 />
-                <FilterDropdown<string>
-                    label="Price"
-                    options={priceRange}
-                    value={selectedFilters.price ?? ''}
-                    onChange={(value) => setSelectedFilters(prev => ({ ...prev, price: value }))}
+                
+                <PriceFilterDropdown
+                    selectedFilters={selectedFilters}
+                    setSelectedFilters={setSelectedFilters}
                 />
                 <FilterDropdown<string>
                     label="Size"
@@ -110,10 +76,12 @@ const FiltersBar = () => {
                     value={selectedFilters.note ?? ''}
                     onChange={(value) => setSelectedFilters(prev => ({ ...prev, note: value }))}
                     getLabel={(item) => item.name}
-                    getValue={(item) => item.id}
+                    getValue={(item) => item.name}
                 />
                 <FilterCheckbox
                     label="On Sale"
+                    checked={selectedFilters.onSale ?? false}
+                    onChange={(isChecked) => setSelectedFilters(prev => ({ ...prev, onSale: isChecked }))}
                 />
             </>
         );
@@ -129,8 +97,8 @@ const FiltersBar = () => {
             <SelectedFiltersBar
                 filters={selectedFilters}
                 labels={{
-                    category: 'Category',
                     price: 'Price',
+                    brand: 'Brand',
                     size: 'Size',
                     condition: 'Condition',
                     note: 'Note',

@@ -6,6 +6,7 @@ import ProductSkeleton from '../Product/ProductSkeleton';
 import { fetchProductsByCategory } from '@/services/products';
 import Breadcrumbs from '../Breadcrumbs';
 import FiltersBar from '../Filters/FiltersBar';
+import type { Filters } from '@/types/filters';
 
 const PAGE_SIZE = 12; 
 
@@ -16,6 +17,8 @@ const Category = () => {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const loaderRef = useRef<HTMLDivElement | null>(null);
+
+  const [selectedFilters, setSelectedFilters] = useState<Filters>({});
 
 
   useEffect(() => {
@@ -33,7 +36,7 @@ const Category = () => {
         setIsLoading(true);
 
         try {
-            const newProducts = await fetchProductsByCategory(slug, page);
+            const newProducts = await fetchProductsByCategory(slug, page, selectedFilters);
             setProducts((prevProducts) => {
                 return page === 1 ? newProducts : [...prevProducts, ...newProducts];
             });
@@ -51,7 +54,7 @@ const Category = () => {
     };
   
     fetchCategoryProducts();
-  }, [slug, page]);
+  }, [slug, page, selectedFilters]);
 
   useEffect(() => {
     if (!loaderRef.current) return;
@@ -77,6 +80,8 @@ const Category = () => {
     };
   }, [hasMore, isLoading, loaderRef]);
 
+
+
   useEffect(() => {
     setProducts([]);
     setPage(1);
@@ -85,11 +90,11 @@ const Category = () => {
   }, [slug]);
 
   return (
-    <div className="max-w-[1280px] w-full px-0 py-4 ml-auto mr-auto mt-4 mb-8 font-mono">
+    <div className="w-full max-w-[1280px] px-2 sm:px-4 py-4 mx-auto mt-4 mb-8 font-mono">
       <Breadcrumbs />
-      <FiltersBar/>
+      <FiltersBar selectedFilters={selectedFilters} setSelectedFilters={setSelectedFilters}/>
       <h1 className="text-2xl font-bold mb-4 capitalize">{slug} Products</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {isLoading && page == 1
             ? Array.from({ length: 6 }).map((_, i) => <ProductSkeleton key={i} />)
             : products.map((product) => (

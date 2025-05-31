@@ -1,4 +1,5 @@
 import API from '@/lib/api';
+import type { Filters } from '@/types/filters';
 import { type Product } from '@/types/product';
 
 export const fetchHomeProducts = async (): Promise<{
@@ -18,12 +19,24 @@ export const fetchProducts = async (type?: string, page = 1): Promise<{
   return res.data;
 };
 
-export const fetchProductsByCategory = async (category: string, page: number) => {
+export const fetchProductsByCategory = async (category: string, page: number, selectedFilters: Filters) => {
   const isVirtual = ['suggested', 'popular', 'recently_viewed'].includes(category);
+
+  const params = new URLSearchParams({ page: String(page) });
+  Object.entries(selectedFilters).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== '') {
+      if (Array.isArray(value)) {
+        value.forEach((v) => params.append(key, v));
+      } else {
+        params.append(key, value);
+      }
+    }
+  });
+
   const url = isVirtual
-    ? `/home/${category}?page=${page}`
-    : `/categories/${category}/products?page=${page}`;
+    ? `/home/${category}?${params.toString()}`
+    : `/categories/${category}/products?${params.toString()}`;
 
   const res = await API.get(url);
-  return res.data.data; // adapt if needed
+  return res.data.data;
 };

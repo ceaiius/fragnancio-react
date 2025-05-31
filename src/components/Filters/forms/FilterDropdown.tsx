@@ -23,7 +23,7 @@ export default function FilterDropdown<T>({
   const selectId = `select-${label.toLowerCase().replace(/\s+/g, '-')}`;
 
   return (
-    <div className="flex-grow min-w-[150px]">
+    <div className="grow shrink basis-0 min-w-[150px]">
 
       <div className="relative">
         <select
