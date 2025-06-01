@@ -9,7 +9,8 @@ interface SelectedFiltersBarProps {
 }
 
 export default function SelectedFiltersBar({ filters, labels, onRemove, onClearAll }: SelectedFiltersBarProps) {
-  const activeFilters = Object.entries(filters).filter(([, value]) => value !== undefined && value !== '');
+  const activeFilters = Object.entries(filters)
+    .filter(([key, value]) => key !== 'on_sale' && value !== undefined && value !== '');
 
   if (activeFilters.length === 0) return null;
 

@@ -9,7 +9,15 @@ const ProductCard = ({ product }: { product: Product }) => {
         className="w-full h-50 object-cover rounded-xl"
       />
       <div className="mt-2 text-sm">
-        <p className='font-bold'>${product.price}</p>
+        {product.sale_price && (
+          <div className='flex items-center gap-2'>
+            <p className='line-through text-gray-500'>${product.price}</p>
+            <p className='font-bold'>${product.sale_price}</p>
+          </div>
+        )}
+        {!product.sale_price && (
+          <p className='font-bold'>${product.price}</p>
+        )}
         <p className='font-normal'>{product.brand}</p>
       </div>
       

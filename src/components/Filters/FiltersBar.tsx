@@ -20,7 +20,7 @@ type FiltersBarType = {
 
 const FiltersBar = ({ selectedFilters, setSelectedFilters }: FiltersBarType) => {
 
-    const { notes, brands, priceRange, size, condition, isLoading, error } = useFilterData();
+    const { notes, brands, size, condition, isLoading, error } = useFilterData();
     
 
 
@@ -80,8 +80,8 @@ const FiltersBar = ({ selectedFilters, setSelectedFilters }: FiltersBarType) => 
                 />
                 <FilterCheckbox
                     label="On Sale"
-                    checked={selectedFilters.onSale ?? false}
-                    onChange={(isChecked) => setSelectedFilters(prev => ({ ...prev, onSale: isChecked }))}
+                    checked={selectedFilters.on_sale ?? false}
+                    onChange={(isChecked) => setSelectedFilters(prev => ({ ...prev, on_sale: isChecked }))}
                 />
             </>
         );
@@ -102,7 +102,7 @@ const FiltersBar = ({ selectedFilters, setSelectedFilters }: FiltersBarType) => 
                     size: 'Size',
                     condition: 'Condition',
                     note: 'Note',
-                    onSale: 'On Sale'
+                    on_sale: 'On Sale'
                 }}
                 onRemove={(key) => setSelectedFilters(prev => {
                     const updated = { ...prev };

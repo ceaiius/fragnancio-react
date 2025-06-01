@@ -6,5 +6,5 @@ export interface Filters {
     size?: string | number;
     condition?: string | number;
     note?: string | number;
-    onSale?: boolean;
+    on_sale?: boolean;
 }
