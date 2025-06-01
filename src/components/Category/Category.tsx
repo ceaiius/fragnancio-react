@@ -92,9 +92,11 @@ const Category = () => {
   return (
     <div className="w-full max-w-[1280px] px-2 sm:px-4 py-4 mx-auto mt-4 mb-8 font-mono">
       <Breadcrumbs />
-      <FiltersBar selectedFilters={selectedFilters} setSelectedFilters={setSelectedFilters}/>
+      
       <h1 className="text-2xl font-bold mb-4 capitalize">{slug} Products</h1>
-      <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className='border-b'></div>
+      <FiltersBar selectedFilters={selectedFilters} setSelectedFilters={setSelectedFilters}/>
+      <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-10">
         {isLoading && page == 1
             ? Array.from({ length: 6 }).map((_, i) => <ProductSkeleton key={i} />)
             : products.map((product) => (

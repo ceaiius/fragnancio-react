@@ -1,17 +1,11 @@
 // FiltersBar.tsx
-import FilterDropdown from './forms/FilterDropdown';
-import FilterCheckbox from './forms/FilterCheckbox';
-import FilterDropdownSkeleton from './skeletons/FilterDropdownSkeleton';
-import FilterCheckboxSkeleton from './skeletons/FilterCheckboxSkeleton';
-
-import type { Note } from '@/types/note';
-import SelectedFiltersBar from './SelectedFiltersBar';
-import { useFilterData } from '@/hooks/useFilterData';
+import FiltersContent from './FiltersContent';
 import type { Filters } from '@/types/filters';
 
-import type { Dispatch, SetStateAction } from 'react';
-import type { Brand } from '@/types/brand';
-import PriceFilterDropdown from './forms/FilterPrice';
+import { useState, type Dispatch, type SetStateAction } from 'react';
+import useMediaQuery from '@/hooks/useMediaQuery';
+import FilterModal from './FilterModal';
+import { ArrowDownUp, SlidersHorizontal } from 'lucide-react';
 
 type FiltersBarType = {
     selectedFilters: Filters;
@@ -19,100 +13,50 @@ type FiltersBarType = {
 };
 
 const FiltersBar = ({ selectedFilters, setSelectedFilters }: FiltersBarType) => {
-
-    const { notes, brands, size, condition, isLoading, error } = useFilterData();
+    const filterCount = Object.keys(selectedFilters).length;
     
-
-
-
-    const renderFilterDropdowns = () => {
-        if (error) {
-            return <div className="text-red-500 col-span-full">{error}</div>;
-        }
-
-        if (isLoading) {
-            return (
-                <>
-                    <FilterDropdownSkeleton />
-                    <FilterDropdownSkeleton />
-                    <FilterDropdownSkeleton />
-                    <FilterDropdownSkeleton />
-                    <FilterDropdownSkeleton />
-                    <FilterCheckboxSkeleton />
-                </>
-            );
-        }
-
-        return (
-            <>
-                <FilterDropdown<Brand>
-                    label="Brand"
-                    options={brands}
-                    value={selectedFilters.brand ?? ''}
-                    onChange={(value) => setSelectedFilters(prev => ({ ...prev, brand: value }))}
-                    getLabel={(item) => item.name}
-                    getValue={(item) => item.slug} 
-                />
-                
-                <PriceFilterDropdown
-                    selectedFilters={selectedFilters}
-                    setSelectedFilters={setSelectedFilters}
-                />
-                <FilterDropdown<string>
-                    label="Size"
-                    options={size}
-                    value={selectedFilters.size ?? ''}
-                    onChange={(value) => setSelectedFilters(prev => ({ ...prev, size: value }))}
-                />
-                <FilterDropdown<string>
-                    label="Condition"
-                    options={condition}
-                    value={selectedFilters.condition ?? ''}
-                    onChange={(value) => setSelectedFilters(prev => ({ ...prev, condition: value }))}
-                />
-                <FilterDropdown<Note>
-                    label="Note"
-                    options={notes}
-                    value={selectedFilters.note ?? ''}
-                    onChange={(value) => setSelectedFilters(prev => ({ ...prev, note: value }))}
-                    getLabel={(item) => item.name}
-                    getValue={(item) => item.name}
-                />
-                <FilterCheckbox
-                    label="On Sale"
-                    checked={selectedFilters.on_sale ?? false}
-                    onChange={(isChecked) => setSelectedFilters(prev => ({ ...prev, on_sale: isChecked }))}
-                />
-            </>
-        );
-    };
+    const isMobile = useMediaQuery("(max-width: 1024px)");
+    const [modalOpen, setModalOpen] = useState(false);
 
     return (
-        <div className='flex flex-col gap-2'>
-            <div className="flex flex-wrap gap-4 my-4 rounded-lg">
-            {renderFilterDropdowns()}
-            
-
-            </div>
-            <SelectedFiltersBar
-                filters={selectedFilters}
-                labels={{
-                    price: 'Price',
-                    brand: 'Brand',
-                    size: 'Size',
-                    condition: 'Condition',
-                    note: 'Note',
-                    on_sale: 'On Sale'
-                }}
-                onRemove={(key) => setSelectedFilters(prev => {
-                    const updated = { ...prev };
-                    delete updated[key as keyof typeof prev];
-                    return updated;
-                })}
-                onClearAll={() => setSelectedFilters({})}
-            />
-        </div>
-        
+        <>
+            {isMobile ? (
+                <div className='w-full flex justify-between items-center gap-4 mt-6'>
+                        <button
+                        className='grow basis-0 flex justify-center items-center gap-4'
+                        onClick={() => setModalOpen(true)}
+                        >
+                        <SlidersHorizontal/>
+                        Filter
+                        <span className='border rounded-[50%] w-5 h-5 flex justify-center items-center'>{filterCount}</span>
+                        </button>
+                    
+                    
+                    <div></div>
+                    <div className='basis-0.5 flex justify-center h-8 bg-gray-default'>
+                        
+                    </div>
+                    <div className='basis-0 grow flex justify-center'>
+                        <button className='flex justify-center items-center gap-4'>
+                            <ArrowDownUp/>
+                            Sort
+                        </button>
+                    </div>
+                <FilterModal open={modalOpen} onClose={() => setModalOpen(false)}>
+                    <FiltersContent
+                      selectedFilters={selectedFilters}
+                      setSelectedFilters={setSelectedFilters}
+                      onClose={() => setModalOpen(false)}
+                    />
+                </FilterModal>
+              </div>
+            ) : (
+                <FiltersContent
+                  selectedFilters={selectedFilters}
+                  setSelectedFilters={setSelectedFilters}
+                />
+            )}
+        </>
     );
 };
 

@@ -4,7 +4,7 @@ const ProductCard = ({ product }: { product: Product }) => {
   return (
     <div className="flex flex-col">
       <img
-        src='https://pngmax.com/_next/image?url=https%3A%2F%2Fpng-max.s3.ap-south-1.amazonaws.com%2Flow%2F936505e8-677a-4a6a-af4e-e4a8c0f31dc9.png&w=1200&q=75'
+        src='https://i.natgeofe.com/n/548467d8-c5f1-4551-9f58-6817a8d2c45e/NationalGeographic_2572187_square.jpg?wp=1&w=357&h=357'
         alt={product.title}
         className="w-full h-50 object-cover rounded-xl"
       />
