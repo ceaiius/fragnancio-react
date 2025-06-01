@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'; 
-import { fetchProductsByCategory } from '@/services/products';
+import { fetchProductsByCategory, fetchProductsByCategoryVirtual } from '@/services/products';
 import { type Product } from '@/types/product';
 import ProductCard from './ProductCard';
 
@@ -46,7 +46,7 @@ const SeeMoreModal = ({
       setIsLoading(true);
       console.log(`Fetching products - Category: ${categoryKey}, Page: ${page}`);
       try {
-        const newProducts = await fetchProductsByCategory(categoryKey, page);
+        const newProducts = await fetchProductsByCategoryVirtual(categoryKey, page);
         setProducts((prevProducts) => {
           return page === 1 ? newProducts : [...prevProducts, ...newProducts];
         });

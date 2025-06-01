@@ -58,7 +58,7 @@ const BrandProductsPage = () => {
   return (
     <div className="max-w-[1280px] mx-auto mt-4 mb-8 font-mono px-4">
       <Breadcrumbs/>
-      <h1 className="text-2xl font-bold mb-4 capitalize">{slug} Products</h1>
+      <h1 className="text-2xl font-bold mb-4 capitalize">{slug}</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {isLoading && page === 1
           ? Array.from({ length: 6 }).map((_, i) => <ProductSkeleton key={i} />)

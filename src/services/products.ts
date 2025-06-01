@@ -20,7 +20,6 @@ export const fetchProducts = async (type?: string, page = 1): Promise<{
 };
 
 export const fetchProductsByCategory = async (category: string, page: number, selectedFilters: Filters) => {
-  const isVirtual = ['suggested', 'popular', 'recently_viewed'].includes(category);
 
   const params = new URLSearchParams({ page: String(page) });
   Object.entries(selectedFilters).forEach(([key, value]) => {
@@ -33,10 +32,14 @@ export const fetchProductsByCategory = async (category: string, page: number, se
     }
   });
 
-  const url = isVirtual
-    ? `/home/${category}?${params.toString()}`
-    : `/categories/${category}/products?${params.toString()}`;
-
-  const res = await API.get(url);
+  const res = await API.get(`/categories/${category}/products?${params.toString()}`);
   return res.data.data;
 };
+
+export const fetchProductsByCategoryVirtual = async (category: string, page: number) => {
+
+  const params = new URLSearchParams({ page: String(page) });
+  
+  const res = await API.get(`/home/${category}?${params.toString()}`);
+  return res.data.data;
+}
