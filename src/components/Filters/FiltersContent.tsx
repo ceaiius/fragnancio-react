@@ -70,6 +70,7 @@ const FiltersContent = ({ selectedFilters, setSelectedFilters, onClose }: Filter
           getValue={(item) => item.name}
         />
         <FilterCheckbox
+          setBorder={true}
           label="On Sale"
           checked={selectedFilters.on_sale ?? false}
           onChange={(isChecked) => setSelectedFilters(prev => ({ ...prev, on_sale: isChecked }))}

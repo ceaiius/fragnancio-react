@@ -31,8 +31,11 @@ const Navbar = ({ isMobile = false }: NavbarProps) => {
           {isMobile && <ArrowRight className="w-5 h-5 text-black-default" />}
         </li>
       ))}
-      <li>
+      <li className={`${isMobile && 'py-3 px-4 border-b  border-black-button'} flex items-center justify-between`}
+>
         <Link to="/brands">Brands</Link>
+        {isMobile && <ArrowRight className="w-5 h-5 text-black-default" />}
+
       </li>
       </ul>
 

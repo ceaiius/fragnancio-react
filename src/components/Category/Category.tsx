@@ -41,9 +41,7 @@ const Category = () => {
                 return page === 1 ? newProducts : [...prevProducts, ...newProducts];
             });
             setHasMore(newProducts.length >= PAGE_SIZE);
-            if (newProducts.length < PAGE_SIZE) {
-                console.log("No more products to load for this category.");
-            }
+
             
         } catch (error) {
             console.error('Error fetching category products', error);

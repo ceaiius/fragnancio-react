@@ -4,8 +4,9 @@ import type { Filters } from '@/types/filters';
 
 import { useState, type Dispatch, type SetStateAction } from 'react';
 import useMediaQuery from '@/hooks/useMediaQuery';
-import FilterModal from './FilterModal';
+import FilterModal from './modals/FilterModal';
 import { ArrowDownUp, SlidersHorizontal } from 'lucide-react';
+import FiltersContentMobile from './FiltersContentMobile';
 
 type FiltersBarType = {
     selectedFilters: Filters;
@@ -28,7 +29,9 @@ const FiltersBar = ({ selectedFilters, setSelectedFilters }: FiltersBarType) => 
                         >
                         <SlidersHorizontal/>
                         Filter
-                        <span className='border rounded-[50%] w-5 h-5 flex justify-center items-center'>{filterCount}</span>
+                        {filterCount != 0 && (
+                            <span className='border rounded-[50%] w-5 h-5 flex justify-center items-center'>{filterCount}</span>
+                        )}
                         </button>
                     
                     
@@ -43,11 +46,7 @@ const FiltersBar = ({ selectedFilters, setSelectedFilters }: FiltersBarType) => 
                         </button>
                     </div>
                 <FilterModal open={modalOpen} onClose={() => setModalOpen(false)}>
-                    <FiltersContent
-                      selectedFilters={selectedFilters}
-                      setSelectedFilters={setSelectedFilters}
-                      onClose={() => setModalOpen(false)}
-                    />
+                    <FiltersContentMobile selectedFilters={selectedFilters} setSelectedFilters={setSelectedFilters} onClose={() => setModalOpen(false)}/>
                 </FilterModal>
               </div>
             ) : (
