@@ -19,7 +19,8 @@ const Category = () => {
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
   const [selectedFilters, setSelectedFilters] = useState<Filters>({});
-
+  const [selectedSort, setSelectedSort] = useState("");
+  ;
 
   useEffect(() => {
     if (isLoading && page > 1) {
@@ -36,7 +37,7 @@ const Category = () => {
         setIsLoading(true);
 
         try {
-            const newProducts = await fetchProductsByCategory(slug, page, selectedFilters);
+            const newProducts = await fetchProductsByCategory(slug, page, selectedFilters, selectedSort);
             setProducts((prevProducts) => {
                 return page === 1 ? newProducts : [...prevProducts, ...newProducts];
             });
@@ -52,7 +53,7 @@ const Category = () => {
     };
   
     fetchCategoryProducts();
-  }, [slug, page, selectedFilters]);
+  }, [slug, page, selectedFilters, selectedSort]);
 
   useEffect(() => {
     if (!loaderRef.current) return;
@@ -93,7 +94,7 @@ const Category = () => {
       
       <h1 className="text-2xl font-bold mb-4 capitalize">{slug} Products</h1>
       <div className='border-b'></div>
-      <FiltersBar selectedFilters={selectedFilters} setSelectedFilters={setSelectedFilters}/>
+      <FiltersBar selectedFilters={selectedFilters} setSelectedFilters={setSelectedFilters} selectedSort={selectedSort} setSelectedSort={setSelectedSort}/>
       <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-10">
         {isLoading && page == 1
             ? Array.from({ length: 6 }).map((_, i) => <ProductSkeleton key={i} />)

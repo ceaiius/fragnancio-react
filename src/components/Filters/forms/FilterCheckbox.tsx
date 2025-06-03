@@ -13,7 +13,7 @@ const FilterCheckbox = ({ label, checked, onChange, setBorder }: FilterCheckboxP
   };
 
   return (
-    <div className={`${setBorder && 'border border-gray-default rounded-sm'} flex items-center  py-2 px-4`}>
+    <div className={`${setBorder && 'border border-black-default rounded-sm'} flex items-center  py-2 px-4`}>
       <label className="flex items-center gap-2 cursor-pointer">
         <input
           type="checkbox"

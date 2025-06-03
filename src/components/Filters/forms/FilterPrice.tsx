@@ -61,7 +61,7 @@ export default function PriceFilterDropdown({ selectedFilters, setSelectedFilter
     <div className="relative min-w-[150px]" ref={dropdownRef}>
       <button
         type="button"
-        className="w-full border border-gray-300 px-3 py-2 pr-10 rounded-md shadow-sm bg-white text-left focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        className="w-full border border-black-default px-3 py-2 pr-10 rounded-md shadow-sm bg-white text-left sm:text-sm"
         onClick={() => setOpen(o => !o)}
       >
         {displayLabel}
@@ -70,7 +70,7 @@ export default function PriceFilterDropdown({ selectedFilters, setSelectedFilter
         </span>
       </button>
       {open && (
-        <div className="absolute z-10 mt-2 w-64 bg-white border border-gray-200 rounded-md shadow-lg p-4 flex flex-col gap-4" style={{ left: 0 }}>
+        <div className="absolute z-10 mt-2 w-64 bg-white border border-black-default  rounded-md shadow-lg p-4 flex flex-col gap-4" style={{ left: 0 }}>
           <div className="flex items-center gap-2">
             <div className="flex flex-col flex-1">
               <input

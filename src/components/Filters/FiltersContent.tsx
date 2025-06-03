@@ -80,7 +80,7 @@ const FiltersContent = ({ selectedFilters, setSelectedFilters, onClose }: Filter
   };
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="w-full flex flex-col items-start">
       {onClose && (
         <button
           className="self-end mb-2 px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 text-gray-700"
@@ -89,8 +89,10 @@ const FiltersContent = ({ selectedFilters, setSelectedFilters, onClose }: Filter
           Close
         </button>
       )}
-      <div className="flex flex-wrap gap-4 my-4 rounded-lg">
-        {renderFilterDropdowns()}
+      <div className="flex flex-row w-full max-w-screen-lg items-center justify-between my-4">
+        <div className="flex flex-wrap gap-2 items-center flex-1">
+          {renderFilterDropdowns()}
+        </div>
       </div>
       <SelectedFiltersBar
         filters={selectedFilters}

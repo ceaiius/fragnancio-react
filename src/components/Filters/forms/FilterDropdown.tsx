@@ -23,13 +23,13 @@ export default function FilterDropdown<T>({
   const selectId = `select-${label.toLowerCase().replace(/\s+/g, '-')}`;
 
   return (
-    <div className="grow shrink basis-0 min-w-[150px]">
+    <div className="shrink basis-0 min-w-[150px]">
 
       <div className="relative">
         <select
           id={selectId}
           name={label.toLowerCase()}
-          className="w-full border border-gray-300 px-3 py-2 pr-10 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          className="w-full border border-black-default px-3 py-2 rounded-md appearance-none sm:text-sm"
           value={value}
           onChange={(e) => onChange(e.target.value)}
         >

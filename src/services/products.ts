@@ -19,7 +19,7 @@ export const fetchProducts = async (type?: string, page = 1): Promise<{
   return res.data;
 };
 
-export const fetchProductsByCategory = async (category: string, page: number, selectedFilters: Filters) => {
+export const fetchProductsByCategory = async (category: string, page: number, selectedFilters: Filters, selectedSort: string) => {
 
   const params = new URLSearchParams({ page: String(page) });
   Object.entries(selectedFilters).forEach(([key, value]) => {
@@ -32,7 +32,7 @@ export const fetchProductsByCategory = async (category: string, page: number, se
     }
   });
 
-  const res = await API.get(`/categories/${category}/products?${params.toString()}`);
+  const res = await API.get(`/categories/${category}/products?${params.toString()}&sort=${selectedSort}`);
   return res.data.data;
 };
 

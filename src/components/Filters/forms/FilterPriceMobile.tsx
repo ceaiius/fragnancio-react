@@ -14,10 +14,10 @@ const FilterPriceMobile: React.FC<FilterPriceMobileProps> = ({ min, max, onMinCh
         <div className="flex flex-col items-start">
           <label className="text-xs mb-1 ml-1">Min.</label>
           <div className="flex items-center">
-            <span className="border border-gray-300 rounded-l px-3 py-2 bg-gray-50 text-sm">US$</span>
+            <span className="border border-black-default rounded-l px-3 py-2 bg-gray-50 text-sm">US$</span>
             <input
               type="number"
-              className="border border-gray-300 rounded-r px-3 py-2 w-20 text-sm focus:outline-none"
+              className="border border-black-default  rounded-r px-3 py-2 w-20 text-sm focus:outline-none"
               value={min}
               min={0}
               onChange={e => onMinChange(e.target.value)}
