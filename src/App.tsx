@@ -6,7 +6,7 @@ import SignUp from './pages/Auth/SignUp';
 import Category from './components/Category/Category';
 import BrandsPage from './pages/Brands/BrandsPage';
 import BrandProductsPage from './pages/Brands/BrandsProductPage';
-
+import SearchPage from './pages/Search/SearchPage';
 
 function App() {
   return (
@@ -18,7 +18,7 @@ function App() {
         <Route path="/category/:slug" element={<Category />} />
         <Route path='/brands' element={<BrandsPage/>}/>
         <Route path="/brands/:slug" element={<BrandProductsPage />} />
-
+        <Route path="/search" element={<SearchPage />} />
         {/* <Route path="/product/:id" element={<ProductDetail />} /> */}
       </Route>
     </Routes>

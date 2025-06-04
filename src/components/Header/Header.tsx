@@ -9,6 +9,7 @@ import burgerIcon from '@/assets/burger.svg';
 import Navbar from './Navbar';
 import UserMenu from './UserMenu';
 import { X } from 'lucide-react';
+import SearchInput from '../Search/SearchInput';
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { token } = useAppSelector((state) => state.auth);
@@ -18,7 +19,7 @@ const Header = () => {
   return (
     <>
       <header className='sticky top-0 bg-white w-full z-40'>
-        <div className="flex justify-between items-center h-16 px-8">
+        <div className="flex justify-between items-center h-16 px-2 sm:px-4 md:px-8 min-w-0 flex-wrap">
           <div className='md:hidden'>
             <img
               src={burgerIcon}
@@ -34,18 +35,13 @@ const Header = () => {
             </Link>
           </div>
 
-          <div className="relative hidden md:flex w-[34vw] lg:w-[42vw] max-w-[704px] cursor-pointer">
-            <img src={searchIcon} className="absolute left-6 w-5 h-full" alt="search" />
-            <input
-              type="text"
-              placeholder="Search"
-              className="h-10 rounded-3xl bg-black-button text-ellipsis border-2 border-black-default w-full px-12"
-            />
+          <div className="hidden md:block">
+            <SearchInput/>
           </div>
 
           <nav>
             <ul className="flex gap-4 items-center">
-                  <li className='md:hidden order-1 cursor-pointer'>
+                  <li className=' hidden   order-1 cursor-pointer'>
                         <img src={searchIcon} className="w-7 h-7" alt='search icon' />
                   </li>
                   <li className='order-3 hidden md:block'>
@@ -81,7 +77,7 @@ const Header = () => {
                 </>
               ) : (
                 <>
-                  <li className='order-5'>
+                  <li className='order-5 hidden sm:block'>
                     <Link to="/login" className="text-black font-medium">Login</Link>
                   </li>
                   <li className='order-6'>
