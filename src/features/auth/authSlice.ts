@@ -104,7 +104,8 @@ export const logout = createAsyncThunk<
     try {
       const state = thunkAPI.getState();
       const token = state.auth.token;
-
+      console.log(token);
+      
       await axios.post(`${API_URL}/logout`, null, {
         headers: {
           Authorization: `Bearer ${token}`,

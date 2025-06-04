@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { register as registerUser, resetAuth, type BackendFieldErrors } from '@/features/auth/authSlice';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 
 const registerSchema = z.object({
     username: z.string().min(3, { message: 'Username must be at least 3 characters' }), // Adjusted min for example
@@ -91,6 +92,9 @@ const SignUp = () => {
 
       {/* Right Form Section */}
       <div className="w-full md:w-1/2 flex justify-center  p-8 mx-auto"> 
+        <div className='absolute top-6 left-8'>
+          <ArrowLeft onClick={() => navigate(-1)}/>
+        </div>
         <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md space-y-6 bg-white shadow-lg p-8 rounded-lg">
           <h2 className="text-3xl font-bold text-black-default text-center">Sign up</h2>
 
