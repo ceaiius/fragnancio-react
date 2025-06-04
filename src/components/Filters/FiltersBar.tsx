@@ -14,9 +14,10 @@ type FiltersBarType = {
     setSelectedFilters: Dispatch<SetStateAction<Filters>>;
     selectedSort: string;
     setSelectedSort: Dispatch<SetStateAction<string>>;
+    hideBrandFilter?: boolean;
 };
 
-const FiltersBar = ({ selectedFilters, setSelectedFilters, selectedSort, setSelectedSort }: FiltersBarType) => {
+const FiltersBar = ({ selectedFilters, setSelectedFilters, selectedSort, setSelectedSort, hideBrandFilter = false }: FiltersBarType) => {
     const filterCount = Object.keys(selectedFilters).length;
     
     const isMobile = useMediaQuery("(max-width: 1024px)");
@@ -53,7 +54,7 @@ const FiltersBar = ({ selectedFilters, setSelectedFilters, selectedSort, setSele
                         )}
                     </div>
                 <FilterModal open={modalOpen} onClose={() => setModalOpen(false)}>
-                    <FiltersContentMobile selectedFilters={selectedFilters} setSelectedFilters={setSelectedFilters} onClose={() => setModalOpen(false)}/>
+                    <FiltersContentMobile selectedFilters={selectedFilters} setSelectedFilters={setSelectedFilters} onClose={() => setModalOpen(false)} hideBrandFilter={hideBrandFilter}/>
                 </FilterModal>
               </div>
             ) : (
@@ -61,6 +62,7 @@ const FiltersBar = ({ selectedFilters, setSelectedFilters, selectedSort, setSele
                     <FiltersContent
                         selectedFilters={selectedFilters}
                         setSelectedFilters={setSelectedFilters}
+                        hideBrandFilter={hideBrandFilter}
                         />
                     <div className='basis-0 grow flex justify-center relative'>
                         <button className='flex justify-center text-sm items-center gap-2 cursor-pointer border-black-default border px-2 py-1 rounded-xs' onClick={() => setSortOpen(true)}>

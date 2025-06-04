@@ -25,6 +25,6 @@ export const fetchNotes = async (): Promise<Note[]> => {
 
 
 export const priceOptions = ['Under $25', '$25 - $50', '$50 - $100', 'Over $100'];
-export const sizeOptions = ['5ml', '30ml', '50ml', '100ml', '200ml'];
+export const sizeOptions = ['5ml', '30ml', '50ml', '75ml', '100ml', '200ml'];
 export const conditionOptions = ['New with box', 'New without box', 'Used'];
 

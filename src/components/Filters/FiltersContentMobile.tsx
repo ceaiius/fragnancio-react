@@ -9,11 +9,13 @@ import FilterOptionsModal from './modals/FilterOptionsModal';
 import FiltersFooter from './FiltersFooter';
 import FilterCheckbox from './forms/FilterCheckbox';
 import FilterPriceMobile from './forms/FilterPriceMobile';
+import { useLocation } from 'react-router-dom';
 
 interface FiltersContentProps {
   selectedFilters: Filters;
   setSelectedFilters: (cb: (prev: Filters) => Filters) => void;
-  onClose: () => void; 
+  onClose: () => void;
+  hideBrandFilter?: boolean;
 }
 
 export type FilterConfig =
@@ -45,36 +47,38 @@ export type FilterConfig =
       getValue: (item: Note) => string | number;
     };
 
-const FiltersContentMobile = ({ selectedFilters, setSelectedFilters, onClose }: FiltersContentProps) => {
+const FiltersContentMobile = ({ selectedFilters, setSelectedFilters, onClose, hideBrandFilter = false }: FiltersContentProps) => {
     const { notes, brands, size, condition } = useFilterData();
     const [openFilterKey, setOpenFilterKey] = useState<string | null>(null);
+    const location = useLocation();
+    const isSaleCategory = location.pathname.toLowerCase().includes('/category/sale');
 
     const filterConfigs: FilterConfig[] = [
-      {
-        key: 'brand',
+      ...(!hideBrandFilter ? [{
+        key: 'brand' as const,
         label: 'Brand',
         options: brands,
         value: selectedFilters.brand ?? '',
         onChange: (value: string) => setSelectedFilters(prev => ({ ...prev, brand: value })),
         getLabel: (item: Brand) => item.name,
         getValue: (item: Brand) => item.slug,
-      },
+      }] : []),
       {
-        key: 'size',
+        key: 'size' as const,
         label: 'Size',
         options: size,
         value: selectedFilters.size ?? '',
         onChange: (value: string) => setSelectedFilters(prev => ({ ...prev, size: value })),
       },
       {
-        key: 'condition',
+        key: 'condition' as const,
         label: 'Condition',
         options: condition,
         value: selectedFilters.condition ?? '',
         onChange: (value: string) => setSelectedFilters(prev => ({ ...prev, condition: value })),
       },
       {
-        key: 'note',
+        key: 'note' as const,
         label: 'Note',
         options: notes,
         value: selectedFilters.note ?? '',
@@ -150,12 +154,14 @@ const FiltersContentMobile = ({ selectedFilters, setSelectedFilters, onClose }: 
                 
               </div>
               <div className='w-28 mt-2'>
-                <FilterCheckbox
-                    setBorder={false}
-                    label="On Sale"
-                    checked={selectedFilters.on_sale ?? false}
-                    onChange={(isChecked) => setSelectedFilters(prev => ({ ...prev, on_sale: isChecked }))}
-                    />
+                {!isSaleCategory && (
+                  <FilterCheckbox
+                      setBorder={false}
+                      label="On Sale"
+                      checked={selectedFilters.on_sale ?? false}
+                      onChange={(isChecked) => setSelectedFilters(prev => ({ ...prev, on_sale: isChecked }))}
+                  />
+                )}
               </div>
           </div>
           <FiltersFooter onClearAll={() => setSelectedFilters(() => ({}))} onViewItems={onClose} />

@@ -9,15 +9,19 @@ import type { Dispatch, SetStateAction } from 'react';
 import type { Brand } from '@/types/brand';
 import PriceFilterDropdown from './forms/FilterPrice';
 import type { Note } from '@/types/note';
+import { useLocation } from 'react-router-dom';
 
 interface FiltersContentProps {
   selectedFilters: Filters;
   setSelectedFilters: Dispatch<SetStateAction<Filters>>;
-  onClose?: () => void; 
+  onClose?: () => void;
+  hideBrandFilter?: boolean;
 }
 
-const FiltersContent = ({ selectedFilters, setSelectedFilters, onClose }: FiltersContentProps) => {
+const FiltersContent = ({ selectedFilters, setSelectedFilters, onClose, hideBrandFilter = false }: FiltersContentProps) => {
   const { notes, brands, size, condition, isLoading, error } = useFilterData();
+  const location = useLocation();
+  const isSaleCategory = location.pathname.toLowerCase().includes('/category/sale');
 
   const renderFilterDropdowns = () => {
     if (error) {
@@ -37,14 +41,16 @@ const FiltersContent = ({ selectedFilters, setSelectedFilters, onClose }: Filter
     }
     return (
       <>
-        <FilterDropdown<Brand>
-          label="Brand"
-          options={brands}
-          value={selectedFilters.brand ?? ''}
-          onChange={(value) => setSelectedFilters(prev => ({ ...prev, brand: value }))}
-          getLabel={(item) => item.name}
-          getValue={(item) => item.slug}
-        />
+        {!hideBrandFilter && (
+          <FilterDropdown<Brand>
+            label="Brand"
+            options={brands}
+            value={selectedFilters.brand ?? ''}
+            onChange={(value) => setSelectedFilters(prev => ({ ...prev, brand: value }))}
+            getLabel={(item) => item.name}
+            getValue={(item) => item.slug}
+          />
+        )}
         <PriceFilterDropdown
           selectedFilters={selectedFilters}
           setSelectedFilters={setSelectedFilters}
@@ -69,12 +75,14 @@ const FiltersContent = ({ selectedFilters, setSelectedFilters, onClose }: Filter
           getLabel={(item) => item.name}
           getValue={(item) => item.name}
         />
-        <FilterCheckbox
-          setBorder={true}
-          label="On Sale"
-          checked={selectedFilters.on_sale ?? false}
-          onChange={(isChecked) => setSelectedFilters(prev => ({ ...prev, on_sale: isChecked }))}
-        />
+        {!isSaleCategory && (
+          <FilterCheckbox
+            setBorder={true}
+            label="On Sale"
+            checked={selectedFilters.on_sale ?? false}
+            onChange={(isChecked) => setSelectedFilters(prev => ({ ...prev, on_sale: isChecked }))}
+          />
+        )}
       </>
     );
   };

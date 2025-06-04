@@ -30,6 +30,7 @@ const BrandsPage = () => {
     <div className="font-mono mt-6">
       <Breadcrumbs />
       <h1 className="text-2xl font-bold mb-4">Brands</h1>
+      
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
         {Object.keys(groupedBrands).sort().map(letter => (
           <div key={letter}>

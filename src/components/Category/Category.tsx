@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { type Product } from '@/types/product';
 import ProductCard from '@/components/Product/ProductCard';
 import ProductSkeleton from '../Product/ProductSkeleton';
@@ -7,6 +7,7 @@ import { fetchProductsByCategory } from '@/services/products';
 import Breadcrumbs from '../Breadcrumbs';
 import FiltersBar from '../Filters/FiltersBar';
 import type { Filters } from '@/types/filters';
+import { filtersToQueryParams, queryParamsToFilters } from '@/utils/filterQuery';
 
 const PAGE_SIZE = 12; 
 
@@ -18,9 +19,15 @@ const Category = () => {
   const [hasMore, setHasMore] = useState(true);
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
-  const [selectedFilters, setSelectedFilters] = useState<Filters>({});
+  const [searchParams, setSearchParams] = useSearchParams();
+  // Initialize filters from URL on mount
+  const [selectedFilters, setSelectedFilters] = useState<Filters>(() => queryParamsToFilters(searchParams));
   const [selectedSort, setSelectedSort] = useState("");
-  ;
+
+  // Keep filters in sync with URL
+  useEffect(() => {
+    setSearchParams(filtersToQueryParams(selectedFilters), { replace: true });
+  }, [selectedFilters, setSearchParams]);
 
   useEffect(() => {
     if (isLoading && page > 1) {
@@ -87,6 +94,11 @@ const Category = () => {
     setHasMore(true);
     setIsLoading(true);
   }, [slug]);
+
+  // When the URL changes (e.g. user pastes a new URL), update filters
+  useEffect(() => {
+    setSelectedFilters(queryParamsToFilters(searchParams));
+  }, [searchParams]);
 
   return (
     <div className="w-full max-w-[1280px] px-2 sm:px-4 py-4 mx-auto mt-4 mb-8 font-mono">
