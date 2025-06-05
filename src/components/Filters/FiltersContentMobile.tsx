@@ -93,7 +93,7 @@ const FiltersContentMobile = ({ selectedFilters, setSelectedFilters, onClose, hi
     return (
       <main className="flex flex-col gap-2 font-mono">
         <div className='fixed w-full h-full top-0 left-0 z-10 bg-white overflow-y-auto flex flex-col gap-4'>
-          <div className='flex justify-between p-4 items-center'>
+          <div className='flex justify-between p-6 items-center'>
               <h1 className='text-2xl font-bold'>Filter</h1>
               {onClose && (
                   <button

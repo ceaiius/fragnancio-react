@@ -7,7 +7,7 @@ import ProductSkeleton from '@/components/Product/ProductSkeleton';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import FiltersBar from '@/components/Filters/FiltersBar';
 import type { Filters } from '@/types/filters';
-import { filtersToQueryParams, queryParamsToFilters } from '@/utils/filterQuery';
+import { queryParamsToFilters } from '@/utils/filterQuery';
 
 const PAGE_SIZE = 12;
 
@@ -100,7 +100,7 @@ const SearchPage = () => {
     <div className="w-full max-w-[1280px] px-2 sm:px-4 py-4 mx-auto mt-4 mb-8 font-mono">
       <Breadcrumbs />
       <h1 className="text-2xl font-bold mb-4">
-        Search Results for "{query}"
+        “{query}”
       </h1>
       <div className='border-b'></div>
       

@@ -3,6 +3,11 @@ import api from '@/lib/api';
 import type { Filters } from '@/types/filters';
 import { filtersToQueryParams } from '@/utils/filterQuery';
 
+export interface searchPrompts {
+  query: string;
+  user_id?: number;
+}
+
 export const searchProducts = async (
   query: string,
   page: number = 1,
@@ -15,12 +20,10 @@ export const searchProducts = async (
       page: page.toString(),
     });
 
-    // Add sort parameter if provided
     if (sort) {
       params.append('sort', sort);
     }
 
-    // Add filter parameters
     const filterParams = filtersToQueryParams(filters);
     filterParams.forEach((value, key) => {
       params.append(key, value);
@@ -33,3 +36,30 @@ export const searchProducts = async (
     throw error;
   }
 }; 
+
+export const storePrompts = async (
+  query: string,
+  user_id: number
+) : Promise<searchPrompts[]> => {
+  try {
+    const response = await api.post('/search-logs', {
+      query,
+      user_id
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error storing search prompts:', error);
+    throw error;
+  }
+};
+
+
+export const getTrendingPrompts = async ()  => {
+  try {
+    const response = await api.get(`search-logs/trending`);
+    return response.data;
+  } catch (error) {
+    console.error('Error getting search prompts:', error);
+    throw error;
+  }
+}

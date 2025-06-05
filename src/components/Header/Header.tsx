@@ -9,17 +9,20 @@ import burgerIcon from '@/assets/burger.svg';
 import Navbar from './Navbar';
 import UserMenu from './UserMenu';
 import { X } from 'lucide-react';
-import SearchInput from '../Search/SearchInput';
+import SearchInput from './Search/SearchInput';
+import SearchModal from './Search/SearchModal';
+import SearchContent from './Search/SearchContent';
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { token } = useAppSelector((state) => state.auth);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   const isAuthenticated = !!token;
   
   return (
     <>
       <header className='sticky top-0 bg-white w-full z-40'>
-        <div className="flex justify-between items-center h-16 px-2 sm:px-4 md:px-8 min-w-0 flex-wrap">
+        <div className="flex justify-between items-center h-16 px-4 sm:px-4 md:px-8 min-w-0 flex-wrap">
           <div className='md:hidden'>
             <img
               src={burgerIcon}
@@ -41,8 +44,8 @@ const Header = () => {
 
           <nav>
             <ul className="flex gap-4 items-center">
-                  <li className=' hidden   order-1 cursor-pointer'>
-                        <img src={searchIcon} className="w-7 h-7" alt='search icon' />
+                  <li className='block md:hidden order-1 cursor-pointer'>
+                        <img src={searchIcon} className="w-7 h-7" alt='search icon' onClick={() => setSearchOpen(true)}/>
                   </li>
                   <li className='order-3 hidden md:block'>
                     <Link to="/wishlist">
@@ -93,7 +96,9 @@ const Header = () => {
           </nav>
         </div>
         <hr className='bg-gray-default border-0 h-px' />
-
+        <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)}>
+          <SearchContent onClose={() => setSearchOpen(false)}/>
+        </SearchModal>
         <div className='hidden md:block'>
           <Navbar />
         </div>
