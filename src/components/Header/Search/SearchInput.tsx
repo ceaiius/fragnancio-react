@@ -20,7 +20,11 @@ const SearchInput = () => {
 
   return (
     <div className="relative hidden md:flex w-[34vw] lg:w-[42vw] max-w-[704px] cursor-pointer">
-      <img src={searchIcon} className="absolute left-6 w-5 h-full" alt="search" />
+      <img 
+        src={searchIcon} 
+        className="absolute left-6 w-5 h-full" 
+        alt="search" 
+      />
 
       <input
         type="text"
@@ -33,7 +37,6 @@ const SearchInput = () => {
         onClick={handleSearch}
         className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
       >
-
       </button>
     </div>
   );

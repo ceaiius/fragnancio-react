@@ -12,10 +12,13 @@ import { X } from 'lucide-react';
 import SearchInput from './Search/SearchInput';
 import SearchModal from './Search/SearchModal';
 import SearchContent from './Search/SearchContent';
+import { useTrendingSearches } from '@/hooks/useTrendingSearches';
+
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { token } = useAppSelector((state) => state.auth);
   const [searchOpen, setSearchOpen] = useState(false);
+  const { trendingPrompts, isLoading } = useTrendingSearches();
 
   const isAuthenticated = !!token;
   
@@ -45,7 +48,12 @@ const Header = () => {
           <nav>
             <ul className="flex gap-4 items-center">
                   <li className='block md:hidden order-1 cursor-pointer'>
-                        <img src={searchIcon} className="w-7 h-7" alt='search icon' onClick={() => setSearchOpen(true)}/>
+                        <img 
+                          src={searchIcon} 
+                          className="w-7 h-7" 
+                          alt='search icon' 
+                          onClick={() => setSearchOpen(true)}
+                        />
                   </li>
                   <li className='order-3 hidden md:block'>
                     <Link to="/wishlist">
@@ -74,9 +82,6 @@ const Header = () => {
                   <li className='hidden md:block order-6'>
                     <UserMenu/>
                   </li>
-
-                  
-
                 </>
               ) : (
                 <>
@@ -97,7 +102,11 @@ const Header = () => {
         </div>
         <hr className='bg-gray-default border-0 h-px' />
         <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)}>
-          <SearchContent onClose={() => setSearchOpen(false)}/>
+          <SearchContent 
+            onClose={() => setSearchOpen(false)} 
+            trendingPrompts={trendingPrompts}
+            isLoading={isLoading}
+          />
         </SearchModal>
         <div className='hidden md:block'>
           <Navbar />

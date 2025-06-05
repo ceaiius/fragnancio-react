@@ -3,19 +3,24 @@ import { useNavigate } from 'react-router-dom';
 import { useDebounce } from '@/hooks/useDebounce';
 import searchIcon from '@/assets/search.svg';
 import { ArrowRight } from 'lucide-react';
-import { storePrompts, getTrendingPrompts, type searchPrompts } from '@/services/searchService';
+import { storePrompts, type searchPrompts } from '@/services/searchService';
 import { useAppSelector } from '@/store/hooks';
 
 const MAX_HISTORY = 3;
 
-const SearchInputMobile = ({ onClose }: { onClose: () => void }) => {
+interface SearchInputMobileProps {
+  onClose: () => void;
+  trendingPrompts: searchPrompts[];
+  isLoading?: boolean;
+}
+
+const SearchInputMobile = ({ onClose, trendingPrompts, isLoading = false }: SearchInputMobileProps) => {
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
   const [searchHistory, setSearchHistory] = useState<{ key: string }[]>([]);
   const user = useAppSelector((state) => state.auth.user);
   const userId = user ? user.id : null;
-  const [trendingPrompts, setTrendingPrompts] = useState<searchPrompts[]>([]);
 
   useEffect(() => {
     const stored = localStorage.getItem('searchHistory');
@@ -29,12 +34,6 @@ const SearchInputMobile = ({ onClose }: { onClose: () => void }) => {
     } else {
       setSearchHistory([]);
     }
-  }, []);
-
-  useEffect(() => {
-    getTrendingPrompts()
-      .then((data) => setTrendingPrompts(data.trending))
-      .catch(() => setTrendingPrompts([]));
   }, []);
 
   const addToHistory = useCallback((term: string) => {
@@ -74,7 +73,11 @@ const SearchInputMobile = ({ onClose }: { onClose: () => void }) => {
   return (
     <div className="">
       <div className='relative md:flex w-full cursor-pointer'>
-        <img src={searchIcon} className="absolute left-4 w-5 h-full" alt="search" />
+        <img 
+          src={searchIcon} 
+          className="absolute left-4 w-5 h-full" 
+          alt="search" 
+        />
         <input
           type="text"
           value={searchTerm}
@@ -118,32 +121,40 @@ const SearchInputMobile = ({ onClose }: { onClose: () => void }) => {
           </>
         )}
 
-        {trendingPrompts.length > 0 && (
-            <div className='mt-4'>
-            <div className="text-xs text-gray-faded">Trending searches</div>
-            {trendingPrompts.map((prompt, idx) => (
-                <div
+        <div className='mt-4'>
+          <div className="text-xs text-gray-faded">Trending searches</div>
+          {isLoading ? (
+            // Loading skeleton
+            Array.from({ length: 3 }).map((_, idx) => (
+              <div
+                key={idx}
+                className="animate-pulse bg-gray-200 h-6 my-1 rounded"
+              />
+            ))
+          ) : trendingPrompts.length > 0 ? (
+            trendingPrompts.map((prompt, idx) => (
+              <div
                 key={idx}
                 className="hover:bg-gray-default cursor-pointer py-1 px-2"
                 onClick={() => {
-                    if (typeof prompt === 'string') {
-                        navigate(`/search?q=${encodeURIComponent(prompt)}`);
-                    } else {
-                        navigate(`/search?q=${encodeURIComponent(prompt.query)}`);
-                    }
-                    onClose();
+                  if (typeof prompt === 'string') {
+                    navigate(`/search?q=${encodeURIComponent(prompt)}`);
+                  } else {
+                    navigate(`/search?q=${encodeURIComponent(prompt.query)}`);
+                  }
+                  onClose();
                 }}
-                >
-                    {typeof prompt === 'string' ? prompt : prompt.query}
-                </div>
-            ))}
-            </div>
-        )}
+              >
+                {typeof prompt === 'string' ? prompt : prompt.query}
+              </div>
+            ))
+          ) : (
+            <div className="text-sm text-gray-500 py-1">No trending searches available</div>
+          )}
+        </div>
       </div>
-
-      
     </div>
   );
 };
 
-export default SearchInputMobile; 
+export default SearchInputMobile;
