@@ -1,4 +1,4 @@
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import { type Product } from '@/types/product';
 import ProductCard from '@/components/Product/ProductCard';
@@ -113,16 +113,9 @@ const SearchPage = () => {
 
       {error ? (
         <div className="text-center py-8">
-          <p className="text-gray-500 mb-4">{error}</p>
-          <button 
-            onClick={() => {
-              setFilters({});
-              setError(null);
-            }}
-            className="text-blue-500 hover:text-blue-700 underline"
-          >
-            Clear all filters
-          </button>
+          <h1 className="text-black-default  font-bold text-2xl">Sorry, we couldn't find anything</h1>
+          <p className="text-gray-500 mb-4">Try adjusting your filters or search term.</p>
+          <Link to="/" className="text-black-default hover:underline font-bold">Go back to the home page</Link>
         </div>
       ) : (
         <>
