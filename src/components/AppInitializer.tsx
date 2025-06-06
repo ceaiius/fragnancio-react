@@ -4,13 +4,13 @@ import { fetchUser } from '@/features/auth/authSlice';
 
 const AppInitializer = () => {
   const dispatch = useAppDispatch();
-  const { token, user } = useAppSelector((state) => state.auth);
+  const { token } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
-    if (token && !user) {
+    if (token) {
       dispatch(fetchUser());
     }
-  }, [token, user, dispatch]);
+  }, [token, dispatch]);
 
   return null;
 };

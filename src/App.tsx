@@ -13,6 +13,7 @@ import ProfileLikes from './pages/Profile/ProfileLikes';
 import ProfileSaved from './pages/Profile/ProfileSaved';
 import ProtectedRoute from './components/ProtectedRoute';
 import AppInitializer from './components/AppInitializer';
+import Settings from './pages/Settings/Settings';
 
 function App() {
   return (
@@ -37,6 +38,11 @@ function App() {
             <Route path="likes" element={<ProfileLikes />} />
             <Route path="saved" element={<ProfileSaved />} />
           </Route>
+          <Route path="/settings" element={
+            <ProtectedRoute>
+              <Settings />
+            </ProtectedRoute>
+          } />
         </Route>
       </Routes>
     </>

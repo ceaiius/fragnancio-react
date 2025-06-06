@@ -48,6 +48,9 @@ const UserMenu = () => {
               <Link to="/profile" className="block px-4 py-2 hover:bg-gray-100">Profile</Link>
             </li>
             <li>
+              <Link to="/settings" className="block px-4 py-2 hover:bg-gray-100">Settings</Link>
+            </li>
+            <li>
               <button
                 onClick={handleLogout}
                 className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600 cursor-pointer"

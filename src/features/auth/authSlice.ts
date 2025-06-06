@@ -25,7 +25,17 @@ type AuthState = {
 
 const initialState: AuthState = {
   token: localStorage.getItem('token'),
-  user: null,
+  user: (() => {
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      try {
+        return JSON.parse(userStr);
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  })(),
   loading: false,
   isSuccess: false,
   error: null,
@@ -129,6 +139,10 @@ const authSlice = createSlice({
       state.isSuccess = false;
       state.error = null;
     },
+    setUser: (state, action: PayloadAction<User>) => {
+      state.user = action.payload;
+      localStorage.setItem('user', JSON.stringify(action.payload));
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -180,6 +194,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.user = action.payload;
         state.error = null;
+        localStorage.setItem('user', JSON.stringify(action.payload));
       })
       .addCase(fetchUser.rejected, (state, action: PayloadAction<string | undefined>) => {
         state.loading = false;
@@ -192,6 +207,7 @@ const authSlice = createSlice({
         state.user = null;
         state.token = null;
         state.loading = false;
+        localStorage.removeItem('user');
       })
       .addCase(logout.rejected, (state) => {
         state.loading = false;
@@ -200,5 +216,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { resetAuth } = authSlice.actions;
+export const { resetAuth, setUser } = authSlice.actions;
 export default authSlice.reducer;
