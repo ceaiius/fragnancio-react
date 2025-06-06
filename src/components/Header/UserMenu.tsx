@@ -2,8 +2,8 @@ import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { logout } from '@/features/auth/authSlice';
-import { ChevronDown } from 'lucide-react'; // optional: using lucide icons
-import avatarIcon from '@/assets/avatar.svg'; // use a placeholder profile icon
+import { ChevronDown } from 'lucide-react';
+import Avatar from '../Avatar/Avatar';
 
 const UserMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,7 +35,9 @@ const UserMenu = () => {
         onClick={toggleMenu}
         className="flex items-center gap-2 px-2 py-1 rounded-full transition cursor-pointer"
       >
-        <img src={avatarIcon} alt="User Avatar" className="w-8 h-8 rounded-full" />
+        <div className='w-8 h-8 rounded-full'>
+            <Avatar size='sm'/>
+        </div>
         <ChevronDown className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 

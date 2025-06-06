@@ -4,7 +4,7 @@ import * as z from 'zod';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { login, fetchUser, resetAuth, type BackendFieldErrors } from '@/features/auth/authSlice';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { type LoginFormData } from '@/types/auth';
 import { ArrowLeft } from 'lucide-react';
 
@@ -19,6 +19,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 const Login = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const { token, error: apiError, loading, isSuccess } = useAppSelector((state) => state.auth);
 
   const {
@@ -42,9 +43,10 @@ const Login = () => {
   useEffect(() => {
     if (isSuccess && token) {
       dispatch(fetchUser());
-      navigate('/');
+      const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/';
+      navigate(from, { replace: true });
     }
-  }, [isSuccess, token, dispatch, navigate]);
+  }, [isSuccess, token, dispatch, navigate, location]);
 
   useEffect(() => {
           if (apiError) {

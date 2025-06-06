@@ -7,7 +7,7 @@ const API_URL = 'http://localhost:8000/api';
 
 interface User {
   id: number;
-  name: string;
+  username: string;
   email: string;
 }
 
@@ -152,7 +152,6 @@ const authSlice = createSlice({
         } else {
           state.error = 'Authorization failed due to an unknown error.';
         }
-
       })
       .addCase(register.pending, (state) => {
         state.loading = true;
@@ -163,7 +162,6 @@ const authSlice = createSlice({
         state.loading = false;
         state.isSuccess = true;
         state.token = action.payload;
-        state.token = action.payload;
       })
       .addCase(register.rejected, (state, action: PayloadAction<string | BackendFieldErrors | undefined>) => {
         state.loading = false;
@@ -173,6 +171,19 @@ const authSlice = createSlice({
         } else {
           state.error = 'Register failed due to an unknown error.';
         }
+      })
+      .addCase(fetchUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchUser.fulfilled, (state, action: PayloadAction<User>) => {
+        state.loading = false;
+        state.user = action.payload;
+        state.error = null;
+      })
+      .addCase(fetchUser.rejected, (state, action: PayloadAction<string | undefined>) => {
+        state.loading = false;
+        state.error = action.payload || 'Failed to fetch user data';
       })
       .addCase(logout.pending, (state) => {
         state.loading = true;
@@ -186,7 +197,6 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = 'Logout failed';
       });
-
   },
 });
 
