@@ -83,7 +83,7 @@ const BrandProductsPage = () => {
       <Breadcrumbs/>
       <h1 className="text-2xl font-bold mb-4 capitalize">{slug}</h1>
       <FiltersBar selectedFilters={filters} setSelectedFilters={setFilters} selectedSort={selectedSort} setSelectedSort={setSelectedSort} hideBrandFilter={true} />
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-10">
         {isLoading && page === 1
           ? Array.from({ length: 6 }).map((_, i) => <ProductSkeleton key={i} />)
           : products.map((product) => (
