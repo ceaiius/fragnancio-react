@@ -7,13 +7,11 @@ export const useTrendingSearches = () => {
   const [error, setError] = useState<Error | null>(null);
   const hasLoaded = useRef(false);
 
-  const loadTrendingSearches = async () => {
-    // Only prevent loading if we already have data
-    if (trendingPrompts.length > 0) return;
-    
+  // Accepts a 'force' parameter to always fetch, even if trendingPrompts is not empty
+  const loadTrendingSearches = async (force = false) => {
+    if (!force && trendingPrompts.length > 0) return;
     setIsLoading(true);
     setError(null);
-    
     try {
       const data = await getTrendingPrompts();
       setTrendingPrompts(data.trending);
@@ -37,6 +35,6 @@ export const useTrendingSearches = () => {
     trendingPrompts,
     isLoading,
     error,
-    loadTrendingSearches
+    loadTrendingSearches, // Call with loadTrendingSearches(true) to force refetch
   };
 }; 

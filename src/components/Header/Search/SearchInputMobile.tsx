@@ -14,7 +14,7 @@ interface SearchInputMobileProps {
   isLoading?: boolean;
 }
 
-const SearchInputMobile = ({ onClose, trendingPrompts, isLoading = false }: SearchInputMobileProps) => {
+const SearchInputMobile = ({ onClose, trendingPrompts}: SearchInputMobileProps) => {
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
@@ -122,18 +122,12 @@ const SearchInputMobile = ({ onClose, trendingPrompts, isLoading = false }: Sear
         )}
 
         <div className='mt-4'>
-          <div className="text-xs text-gray-faded">Trending searches</div>
-          {isLoading ? (
-            // Loading skeleton
-            Array.from({ length: 3 }).map((_, idx) => (
-              <div
-                key={idx}
-                className="animate-pulse bg-gray-200 h-6 my-1 rounded"
-              />
-            ))
-          ) : trendingPrompts.length > 0 ? (
+          {trendingPrompts.length > 0 && (
+            <div className="text-xs text-gray-faded">Trending searches</div>
+          )}
+          {trendingPrompts.length > 0 && (
             trendingPrompts.map((prompt, idx) => (
-              <div
+                <div
                 key={idx}
                 className="hover:bg-gray-default cursor-pointer py-1 px-2"
                 onClick={() => {
@@ -148,8 +142,6 @@ const SearchInputMobile = ({ onClose, trendingPrompts, isLoading = false }: Sear
                 {typeof prompt === 'string' ? prompt : prompt.query}
               </div>
             ))
-          ) : (
-            <div className="text-sm text-gray-500 py-1">No trending searches available</div>
           )}
         </div>
       </div>

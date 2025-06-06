@@ -18,10 +18,15 @@ const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { token } = useAppSelector((state) => state.auth);
   const [searchOpen, setSearchOpen] = useState(false);
-  const { trendingPrompts, isLoading } = useTrendingSearches();
+  const { trendingPrompts, isLoading, loadTrendingSearches } = useTrendingSearches();
 
   const isAuthenticated = !!token;
   
+  const handleSearchModalClose = () => {
+    setSearchOpen(false);
+    loadTrendingSearches(true);
+  };
+
   return (
     <>
       <header className='sticky top-0 bg-white w-full z-40'>
@@ -101,9 +106,9 @@ const Header = () => {
           </nav>
         </div>
         <hr className='bg-gray-default border-0 h-px' />
-        <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)}>
+        <SearchModal open={searchOpen} onClose={handleSearchModalClose}>
           <SearchContent 
-            onClose={() => setSearchOpen(false)} 
+            onClose={handleSearchModalClose} 
             trendingPrompts={trendingPrompts}
             isLoading={isLoading}
           />
