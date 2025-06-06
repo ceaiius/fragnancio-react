@@ -7,6 +7,10 @@ import Category from './components/Category/Category';
 import BrandsPage from './pages/Brands/BrandsPage';
 import BrandProductsPage from './pages/Brands/BrandsProductPage';
 import SearchPage from './pages/Search/SearchPage';
+import Profile from './pages/Profile/Profile';
+import ProfileSelling from './pages/Profile/ProfileSelling';
+import ProfileLikes from './pages/Profile/ProfileLikes';
+import ProfileSaved from './pages/Profile/ProfileSaved';
 
 function App() {
   return (
@@ -19,7 +23,11 @@ function App() {
         <Route path='/brands' element={<BrandsPage/>}/>
         <Route path="/brands/:slug" element={<BrandProductsPage />} />
         <Route path="/search" element={<SearchPage />} />
-        {/* <Route path="/product/:id" element={<ProductDetail />} /> */}
+        <Route path="/profile" element={<Profile />}>
+          <Route index element={<ProfileSelling />} />
+          <Route path="likes" element={<ProfileLikes />} />
+          <Route path="saved" element={<ProfileSaved />} />
+        </Route>
       </Route>
     </Routes>
   );
