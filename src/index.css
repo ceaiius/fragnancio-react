@@ -12,6 +12,8 @@
   --color-blue-default: #2960AF;
   --color-gray-faded: #747474;
   --color-gray-footer: #F3F3F3;
+  --color-gray-label: rgb(116, 116, 116);
+  --color-white-background: rgb(255, 255, 255);
 }
 
 @theme inline {

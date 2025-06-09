@@ -81,7 +81,7 @@ const Login = () => {
       {/* Right Form Section */}
       <div className="w-full md:w-1/2 flex justify-center p-10 mx-auto">
         <div className='absolute top-6 left-8'>
-          <ArrowLeft onClick={() => navigate(-1)}/>
+          <ArrowLeft onClick={() => navigate(-1)} className='cursor-pointer md:hidden'/>
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md space-y-6">
           <h2 className="text-3xl font-bold text-black-default text-center">Log in</h2>

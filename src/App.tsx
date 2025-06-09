@@ -14,6 +14,7 @@ import ProfileSaved from './pages/Profile/ProfileSaved';
 import ProtectedRoute from './components/ProtectedRoute';
 import AppInitializer from './components/AppInitializer';
 import Settings from './pages/Settings/Settings';
+import Create from './pages/Product/Create';
 
 function App() {
   return (
@@ -43,7 +44,13 @@ function App() {
               <Settings />
             </ProtectedRoute>
           } />
+          <Route path="/create" element={
+            <ProtectedRoute>
+              <Create />
+            </ProtectedRoute>
+          } />
         </Route>
+        
       </Routes>
     </>
   );
